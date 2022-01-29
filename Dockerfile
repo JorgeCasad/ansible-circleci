@@ -4,6 +4,8 @@ LABEL com.circleci.preserve-entrypoint=true
 ENV ANSIBLE_HOST_KEY_CHECKING=False
 
 RUN yum check-update; \
+    yum --security update \
+    sudo yum -x 'kernel*' update \
     yum install -y gcc libffi-devel python3 epel-release; \
     yum install -y python3-pip; \
     yum install -y wget; \
