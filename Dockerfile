@@ -3,7 +3,9 @@ LABEL com.circleci.preserve-entrypoint=true
 
 ENV ANSIBLE_HOST_KEY_CHECKING=False
 
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+WORKDIR /etc/yum.repos.d/
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
 RUN yum check-update; \
     yum --security update \
@@ -25,5 +27,6 @@ RUN pip3 install --upgrade pip; \
     pip3 install jmspath; \
     pip3 install requests; \
     python3 -m pip install ansible==2.9.27;
-
+    
+WORKDIR /
 ENTRYPOINT ["bash"]
