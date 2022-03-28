@@ -7,18 +7,7 @@ WORKDIR /etc/yum.repos.d/
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
-RUN yum check-update; \
-    yum --security update \
-    yum -x 'kernel*' update \
-    yum install -y gcc libffi-devel python3 epel-release; \
-    yum makecache --refresh  && yum install -y sshpass ; \
-    yum install -y python3-pip; \
-    yum install -y wget; \
-    yum install -y git; \
-    yum install -y tar; \
-    yum install -y gzip; \
-    yum install -y ca-certificates; \
-    yum clean all
+RUN yum check-update && yum --security update && yum -x 'kernel*' update && yum install -y gcc libffi-devel python3 epel-release sshpass python3-pip wget git tar gzip ca-certificates && yum clean all
 
 RUN pip3 install --upgrade pip; \
     pip3 install --upgrade virtualenv; \
