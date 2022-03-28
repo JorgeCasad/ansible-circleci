@@ -7,7 +7,18 @@ WORKDIR /etc/yum.repos.d/
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
-RUN yum -x 'kernel*' update -y && yum install -y gcc libffi-devel python3 epel-release python3-pip wget git tar gzip ca-certificates sshpass && yum clean all
+RUN yum check-update; \
+    yum --security update; \
+    sudo yum -x 'kernel*' update; \
+    yum install -y gcc libffi-devel python3 epel-release; \
+    yum install -y python3-pip; \
+    yum makecache --refresh  && yum -y install sshpass; \
+    yum install -y wget; \
+    yum install -y git; \
+    yum install -y tar; \
+    yum install -y gzip; \
+    yum install -y ca-certificates; \
+    yum clean all
 
 RUN pip3 install --upgrade pip; \
     pip3 install --upgrade virtualenv; \
@@ -15,7 +26,7 @@ RUN pip3 install --upgrade pip; \
     pip3 install pywinrm; \
     pip3 install jmspath; \
     pip3 install requests; \
-    python3 -m pip install ansible==2.9.27;
+    python3 -m pip install ansible=="2.9.27";
     
 WORKDIR /
 ENTRYPOINT ["bash"]
